@@ -11,7 +11,7 @@ import java.util.*;
  * It communicates with the vending machine's TransactionSummaryController to retrieve transaction data and update the display.
  */
 public class TransactionSummaryView {
-    private RegularVM vm;
+    private RegularVMModel vm;
     private ArrayList<ItemSlot> itemList;
     
     GridBagConstraints gbc = new GridBagConstraints();
@@ -30,7 +30,7 @@ public class TransactionSummaryView {
 
     JButton exit = new JButton("Exit");
     
-    public TransactionSummaryView(RegularVM vm, Transaction transaction) {
+    public TransactionSummaryView(RegularVMModel vm, Transaction transaction) {
 
         this.vm = vm;
         

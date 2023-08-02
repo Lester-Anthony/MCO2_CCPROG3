@@ -9,8 +9,8 @@ import java.awt.event.KeyEvent;
  * The Controller serves as the handler for user inputs, managing data, and coordinating actions between the view and model.
  */
 public class Controller {
-    private RegularVM vm = new RegularVM("Vending Machine");
-    private SpecialVM svm = new SpecialVM("Vending Machine");
+    private RegularVMModel vm = new RegularVMModel("Vending Machine");
+    private SpecialVMModel svm = new SpecialVMModel("Vending Machine");
 
     ItemSlot currentItemSlot;
 
@@ -198,7 +198,7 @@ public class Controller {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
                     // Initializes vm as a Regular VM
-                    vm = new RegularVM(null);
+                    vm = new RegularVMModel(null);
                     isSpecial = false;
                     cl.show(panelCont, "Create RVM");
                 }
@@ -207,7 +207,7 @@ public class Controller {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
                     // Initializes svm as a Special VM
-                    svm = new SpecialVM(null);
+                    svm = new SpecialVMModel(null);
                     isSpecial = true;
                     cl.show(panelCont, "Create SVM");
                 }

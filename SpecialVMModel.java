@@ -4,9 +4,8 @@ import java.util.ArrayList;
  * The SpecialVM class represents a special vending machine, which is a subclass of RegularVM.
  * The special vending machine can handle a shopping cart, calculate cart total cost, and buy all items in the cart at once.
  */
-public class SpecialVM extends RegularVM {
+public class SpecialVMModel extends RegularVMModel {
 
-    protected static final ItemSlot[] getCart = null;   // A special constant for the shopping cart
     private ArrayList<ItemSlot> cart;                   // The list of items in the shopping cart
     float cartTotalCost;                                // The total cost of items in the shopping cart
 
@@ -16,7 +15,7 @@ public class SpecialVM extends RegularVM {
      *
      * @param name The name of the special vending machine.
      */
-    public SpecialVM(String name) {
+    public SpecialVMModel(String name) {
         super(name);
         cart = new ArrayList<ItemSlot>();
     }
@@ -71,7 +70,6 @@ public class SpecialVM extends RegularVM {
 
             // Update cart total cost, payment, and the vending machine's total cost and payment
             cartTotalCost += itemSlot.getItemCost();
-            System.out.println(cartTotalCost);
             payment -= itemSlot.getItemCost();
             totalPayment += payment;
             totalCost += itemSlot.getItemCost();

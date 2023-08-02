@@ -10,7 +10,7 @@ import java.util.*;
  * It communicates with the Controller to perform various vending machine operations.
  */
 public class SpecialVMView {
-    private SpecialVM vm;
+    private SpecialVMModel vm;
     private ArrayList<ItemSlot> itemList;
     
     CardLayout cl = new CardLayout();
@@ -51,7 +51,7 @@ public class SpecialVMView {
         
     JTextField textFieldBalance = new JTextField("0.0");
     
-    public SpecialVMView(SpecialVM vm) {
+    public SpecialVMView(SpecialVMModel vm) {
 
 
         this.vm = vm;

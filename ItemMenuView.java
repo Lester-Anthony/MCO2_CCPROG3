@@ -10,7 +10,7 @@ import java.util.*;
  * It communicates with the Controller to retrieve item data and handle user interactions related to item selection.
  */
 public class ItemMenuView {
-    private RegularVM vm;
+    private RegularVMModel vm;
     private ArrayList<ItemSlot> itemList;
     
     GridBagConstraints gbc = new GridBagConstraints();
@@ -41,7 +41,7 @@ public class ItemMenuView {
         
     JTextField textFieldItemPrice = new JTextField("0.0");
     
-    public ItemMenuView(RegularVM vm) {
+    public ItemMenuView(RegularVMModel vm) {
 
         this.vm = vm;
         this.itemList = vm.getItemSlots();

@@ -1,6 +1,4 @@
 import javax.swing.*;
-import javax.swing.border.Border;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -12,7 +10,7 @@ import java.util.*;
  * It communicates with the Controller to perform various vending machine operations.
  */
 public class RegularVMView {
-    private RegularVM vm;
+    private RegularVMModel vm;
     private ArrayList<ItemSlot> itemList;
     
     CardLayout cl = new CardLayout();
@@ -53,7 +51,7 @@ public class RegularVMView {
         
     JTextField textFieldBalance = new JTextField("0.0");
     
-    public RegularVMView(RegularVM vm) {
+    public RegularVMView(RegularVMModel vm) {
 
 
         this.vm = vm;

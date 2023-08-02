@@ -5,7 +5,7 @@ import java.awt.event.*;
 import java.util.*;
 
 public class BalanceMenuView {
-    private RegularVM vm;
+    private RegularVMModel vm;
     private ArrayList<Denomination> balance;
     
     GridBagConstraints gbc = new GridBagConstraints();
@@ -32,7 +32,7 @@ public class BalanceMenuView {
         
     JTextField textFieldQuantity = new JTextField("1");
     
-    public BalanceMenuView(RegularVM vm, ArrayList<Denomination> balance) {
+    public BalanceMenuView(RegularVMModel vm, ArrayList<Denomination> balance) {
 
         this.vm = vm;
         

@@ -1,10 +1,10 @@
 import java.util.*;
 
 /**
- * The RegularVM class represents a regular vending machine with its attributes and functionalities.
+ * The RegularVMModel class represents a regular vending machine with its attributes and functionalities.
  * It contains item slots, denominations for balance, transaction history, and methods to manage the machine's operation.
  */
-public class RegularVM {
+public class RegularVMModel {
     private String name;                             // The name of the vending machine
     private ArrayList<ItemSlot> itemSlots;           // A list of item slots in the vending machine
     static private ArrayList<Denomination> balance;  // The balance of the vending machine in different denominations
@@ -13,12 +13,12 @@ public class RegularVM {
     protected float totalCost = 0;                   // The total cost of items sold by the vending machine
 
     /**
-     * Creates a new RegularVM object with the given name and initializes its attributes.
+     * Creates a new RegularVMModel object with the given name and initializes its attributes.
      * The vending machine is set up with default denominations and quantities.
      *
      * @param name The name of the vending machine.
      */
-    public RegularVM(String name) {
+    public RegularVMModel(String name) {
         itemSlots = new ArrayList<ItemSlot>();
         balance = new ArrayList<Denomination>();
         transactionHistory = new Transaction();
