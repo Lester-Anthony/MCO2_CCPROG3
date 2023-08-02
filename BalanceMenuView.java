@@ -4,6 +4,12 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 
+/**
+ * The BalanceMenuView class represents the view or user interface for displaying the balance menu in a vending machine.
+ * It provides methods to show the current balance of the vending machine to the user.
+ * This class is responsible for presenting balance information in a user-friendly format.
+ * It communicates with the BalanceMenuController to retrieve balance data and update the display.
+ */
 public class BalanceMenuView {
     private RegularVMModel vm;
     private ArrayList<Denomination> balance;
