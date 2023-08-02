@@ -5,10 +5,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+/**
+ * The Controller serves as the handler for user inputs, managing data, and coordinating actions between the view and model.
+ */
 public class Controller {
     private RegularVM vm = new RegularVM("Vending Machine");
-
-    private RegularVMView regularVMView;
+    private SpecialVM svm = new SpecialVM("Vending Machine");
 
     ItemSlot currentItemSlot;
 
@@ -30,11 +32,9 @@ public class Controller {
     JPanel panelVendingFeatures = new JPanel();
     JPanel panelMaintenanceFeatures = new JPanel();
 
-    JPanel panelStockItem = new JPanel();
-    JPanel panelSetItemPrice = new JPanel();
-    JPanel panelCollectEarnings = new JPanel();
-    JPanel panelReplenishMoney = new JPanel();
     JPanel panelTransactionSummary = new JPanel();
+
+    boolean isSpecial = false;
 
     // Main Menu Elements
         JButton buttonCreateVendingMachine = new JButton("Create Vending Machine");
@@ -103,34 +103,12 @@ public class Controller {
         JButton buttonTestMaintenanceFeatures = new JButton("Test Maintenance Features");
         JButton buttonTVMExit = new JButton("Exit");
     // Maintenance Features Elements
-        JButton buttonGoStockItem = new JButton("Stock Item");
-        JButton buttonGoSetItemPrice = new JButton("Set Item Price");
-        JButton buttonGoCollectEarnings = new JButton("Collect Earnings");
-        JButton buttonGoReplenishMoney = new JButton("Replenish Money");
+        JButton buttonGoItemMenu = new JButton("Item Menu");
+        JButton buttonGoBalanceMenu = new JButton("Balance Menu");
         JButton buttonGoTransactionSummary = new JButton("Transaction Summary");
         JButton buttonTMFExit = new JButton("Exit");
     // Stock Item Panel
-        JPanel panelStockItemItemList = new JPanel();
-        JPanel panelStockItemItemInfo = new JPanel();
-        JPanel panelStockItemMenu = new JPanel();
-
-        JLabel labelStockItemItemNameLabel = new JLabel();
-        JLabel labelStockItemItemPriceLabel = new JLabel();
-        JLabel labelStockItemItemCaloriesLabel = new JLabel();
-        JLabel labelStockItemItemStockLabel = new JLabel();
-        JLabel labelStockItemItemIndexLabel = new JLabel();
-
-        JLabel labelStockItemItemName = new JLabel();
-        JLabel labelStockItemItemPrice = new JLabel();
-        JLabel labelStockItemItemCalories = new JLabel();
-        JLabel labelStockItemItemStock = new JLabel();
-        JLabel labelStockItemItemIndex = new JLabel();
-
     
-
-
-
-
     CardLayout cl = new CardLayout();
     GridBagConstraints gbc = new GridBagConstraints();
 
@@ -149,13 +127,8 @@ public class Controller {
         panelCont.add(panelCreateRVM, "Create RVM");
         panelCont.add(panelCreateSVM, "Create SVM");
 
-        panelCont.add(panelStockItem, "Stock Item");
-        panelCont.add(panelSetItemPrice, "Set Item Price");
-        panelCont.add(panelCollectEarnings, "Collect Earnings");
-        panelCont.add(panelReplenishMoney, "Replenish Money");
         panelCont.add(panelTransactionSummary, "Transaction Summary");
-        
-        // panelCont.add(panelVendingFeatures, "Test Vending Features");
+
         panelCont.add(panelMaintenanceFeatures, "Test Maintenance Features");
 
 
@@ -198,7 +171,7 @@ public class Controller {
             buttonExit.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
-                frame.dispose();
+                    frame.dispose();
                 }
             });
 
@@ -226,14 +199,16 @@ public class Controller {
                 public void actionPerformed(ActionEvent arg0) {
                     // Initializes vm as a Regular VM
                     vm = new RegularVM(null);
+                    isSpecial = false;
                     cl.show(panelCont, "Create RVM");
                 }
             });
             buttonSpecialVM.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
-                    // Initializes vm as a Special VM
-                    vm = new SpecialVM(null);
+                    // Initializes svm as a Special VM
+                    svm = new SpecialVM(null);
+                    isSpecial = true;
                     cl.show(panelCont, "Create SVM");
                 }
             });
@@ -475,7 +450,7 @@ public class Controller {
                             isIndependent = false;
 
                         if(!name.equals("") && cost != 0 && quantity != 0 && (radioButtonSVMDependent.isSelected() || radioButtonSVMIndependent.isSelected()) && !process.equals(""))
-                            vm.addItemSlot(new Item(name, calories, isIndependent, process), cost, quantity);
+                            svm.addItemSlot(new Item(name, calories, isIndependent, process), cost, quantity);
                         else
                             JOptionPane.showMessageDialog(null, "Invalid input.", "Error", JOptionPane.ERROR_MESSAGE);
 
@@ -489,8 +464,8 @@ public class Controller {
                 buttonSVMExitToCreateVM.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent arg0) {
-                        if(vm.getItemSlots().size() >= 1 && !textFieldSVMName.getText().equals("")) {
-                            vm.setName(textFieldSVMName.getText());   
+                        if(svm.getItemSlots().size() >= 1 && !textFieldSVMName.getText().equals("")) {
+                            svm.setName(textFieldSVMName.getText());   
                             cl.show(panelCont, "Create Vending Machine");
                         }
                         else if(textFieldSVMName.getText().equals(""))
@@ -521,21 +496,15 @@ public class Controller {
             gbc.gridy = 3;
             panelTestVendingMachine.add(buttonTVMExit, gbc);
 
-            
-
                 // Test Vending Machine Element Properties
                 buttonTestVendingFeatures.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent arg0) {
-                        int denominations[] = {1000, 500, 200, 100, 50, 20, 10, 5, 1};
-
-                        for(int denomination : denominations) {
-                            vm.addDenomination(new Denomination("PHP " + denomination, denomination, 100));
+                        if(isSpecial) {
+                            SpecialVMView specialVMView = new SpecialVMView(svm);
                         }
-
-                        if(vm instanceof RegularVM) {
-
-                            RegularVMView RegularVMView = new RegularVMView(vm);    
+                        else if(!isSpecial) {
+                            RegularVMView regularVMView = new RegularVMView(vm);    
                         }
                         else
                             JOptionPane.showMessageDialog(null, "Creation of Vending Machine is required.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -559,29 +528,17 @@ public class Controller {
         // Test Maintenance Features Elements
         panelMaintenanceFeatures.setLayout(new GridBagLayout());
 
-        buttonGoStockItem.setPreferredSize(new Dimension(400, 75));
-        buttonGoStockItem.setFocusable(false);
+        buttonGoItemMenu.setPreferredSize(new Dimension(400, 75));
+        buttonGoItemMenu.setFocusable(false);
         gbc.gridx = 0;
         gbc.gridy = 1;
-        panelMaintenanceFeatures.add(buttonGoStockItem, gbc);
+        panelMaintenanceFeatures.add(buttonGoItemMenu, gbc);
 
-        buttonGoSetItemPrice.setPreferredSize(new Dimension(400, 75));
-        buttonGoSetItemPrice.setFocusable(false);
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        panelMaintenanceFeatures.add(buttonGoSetItemPrice, gbc);
-
-        buttonGoCollectEarnings.setPreferredSize(new Dimension(400, 75));
-        buttonGoCollectEarnings.setFocusable(false);
+        buttonGoBalanceMenu.setPreferredSize(new Dimension(400, 75));
+        buttonGoBalanceMenu.setFocusable(false);
         gbc.gridx = 0;
         gbc.gridy = 3;
-        panelMaintenanceFeatures.add(buttonGoCollectEarnings, gbc);
-
-        buttonGoReplenishMoney.setPreferredSize(new Dimension(400, 75));
-        buttonGoReplenishMoney.setFocusable(false);
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        panelMaintenanceFeatures.add(buttonGoReplenishMoney, gbc);
+        panelMaintenanceFeatures.add(buttonGoBalanceMenu, gbc);
 
         buttonGoTransactionSummary.setPreferredSize(new Dimension(400, 75));
         buttonGoTransactionSummary.setFocusable(false);
@@ -596,35 +553,37 @@ public class Controller {
         panelMaintenanceFeatures.add(buttonTMFExit, gbc);
         
                 // Test Maintenance Features Element Properties
-                buttonGoStockItem.addActionListener(new ActionListener() {
+                buttonGoItemMenu.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent arg0) {
-                        ItemVMView itemVMView = new ItemVMView(vm);
-                        // cl.show(panelCont, "Stock Item");
+                        if(!isSpecial) {
+                            ItemMenuView itemMenuView = new ItemMenuView(vm);
+                        }
+                        if(isSpecial) {
+                            ItemMenuView itemMenuView = new ItemMenuView(svm);
+                        }
                     }
                 });
-                buttonGoSetItemPrice.addActionListener(new ActionListener() {
+                buttonGoBalanceMenu.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent arg0) {
-                        cl.show(panelCont, "Set Item Price");
-                    }
-                });
-                buttonGoCollectEarnings.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent arg0) {
-                        cl.show(panelCont, "Collect Earnings");
-                    }
-                });
-                buttonGoReplenishMoney.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent arg0) {
-                        cl.show(panelCont, "Replenish Money");
+                        if(!isSpecial) {
+                            BalanceMenuView balanceMenuView = new BalanceMenuView(vm, vm.getBalance());
+                        }
+                        if(isSpecial) {
+                            BalanceMenuView balanceMenuView = new BalanceMenuView(svm, svm.getBalance());
+                        }
                     }
                 });
                 buttonGoTransactionSummary.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent arg0) {
-                        cl.show(panelCont, "Transaction Summary");
+                        if(!isSpecial) {
+                            TransactionSummaryView transactionSummaryView = new TransactionSummaryView(vm, vm.getTransactionHistory());
+                        }
+                        if(isSpecial) {
+                            TransactionSummaryView transactionSummaryView = new TransactionSummaryView(svm, svm.getTransactionHistory());
+                        }
                     }
                 });
                 buttonTMFExit.addActionListener(new ActionListener() {
@@ -634,149 +593,9 @@ public class Controller {
                     }
                 });
 
-        // // Stock Item Panel
-        // panelStockItem.setLayout(null);
-        // // Item List Panel
-        // panelStockItemItemList.setBounds(10,10,450,940);
-        // panelStockItemItemList.setBackground(Color.GRAY);
-        // panelStockItemItemList.setLayout(new GridLayout());
-        // // panelStockItemItemList.setLayout(new GridLayout(5,4,10,10));
-        // panelStockItem.add(panelStockItemItemList);
-
-
-        
-        // // Item List Panel Buttons
-        // for (int i = 0; i < vm.getItemSlots().size(); i++) {
-
-        //     final Integer innerI = Integer.valueOf(i);
-
-        //     String name = vm.getItemSlots().get(i).getItemName();
-        //     float cost = vm.getItemSlots().get(i).getItemCost();
-        //     float calories = vm.getItemSlots().get(i).getItemCalories();
-        //     int stock = vm.getItemSlots().get(i).getItems().size();
-        //     ItemSlot itemSlot = vm.getItemSlots().get(i);
-        
-        //     JButton buttonSelect = new JButton(name);
-
-        //     buttonSelect.setFocusable(false);
-        //     buttonSelect.setVerticalAlignment(JButton.CENTER);
-        //     buttonSelect.setHorizontalAlignment(JButton.CENTER);
-
-        //     buttonSelect.addActionListener(new ActionListener() {
-        //         @Override
-        //         public void actionPerformed(ActionEvent arg0) {
-        //             labelStockItemItemName.setText(name);
-        //             labelStockItemItemPrice.setText(String.valueOf(cost));
-        //             labelStockItemItemCalories.setText(String.valueOf(calories));
-        //             labelStockItemItemStock.setText(String.valueOf(stock));
-        //             currentItemSlot = itemSlot;
-        //         }
-        //     });
-        //     panelStockItemItemList.add(buttonSelect);
-        // }
-
-        // // Item Info Panel
-        // panelStockItemItemInfo.setBounds(470, 10, 305, 300);
-        // panelStockItemItemInfo.setBackground(Color.gray);
-        // panelStockItemItemInfo.setLayout(new GridBagLayout());
-        // panelStockItem.add(panelStockItemItemInfo);
-
-      
-
-        // Item Info Panel Elements
-            // Labels
-            gbc.gridx = 0;
-            gbc.gridy = 0;
-            labelStockItemItemNameLabel.setHorizontalAlignment(JLabel.LEFT);
-            labelStockItemItemNameLabel.setFont(font2);
-            panelStockItemItemInfo.add(labelStockItemItemNameLabel, gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy = 1;
-            labelStockItemItemPriceLabel.setHorizontalAlignment(JLabel.LEFT);
-            labelStockItemItemPriceLabel.setFont(font2);
-            panelStockItemItemInfo.add(labelStockItemItemPriceLabel, gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy = 2;
-            labelStockItemItemCaloriesLabel.setHorizontalAlignment(JLabel.LEFT);
-            labelStockItemItemCaloriesLabel.setFont(font2);
-            panelStockItemItemInfo.add(labelStockItemItemCaloriesLabel, gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy = 3;
-            labelStockItemItemStockLabel.setHorizontalAlignment(JLabel.LEFT);
-            labelStockItemItemStockLabel.setFont(font2);
-            panelStockItemItemInfo.add(labelStockItemItemStockLabel, gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy = 4;
-            labelStockItemItemIndexLabel.setHorizontalAlignment(JLabel.LEFT);
-            labelStockItemItemIndexLabel.setFont(font2);
-            panelStockItemItemInfo.add(labelStockItemItemIndexLabel, gbc);
-        
-            // Values
-            // labelStockItemItemName.setText(vm.getItemSlots().get(0).getItemName());
-            // labelStockItemItemName.setText("");
-            labelStockItemItemName.setHorizontalAlignment(JLabel.CENTER);
-            labelStockItemItemName.setForeground(new Color(0xeeeeee));
-            labelStockItemItemName.setFont(font2);
-            gbc.gridx = 1;
-            gbc.gridy = 0;
-            panelStockItemItemInfo.add(labelStockItemItemName, gbc);
-            
-            // labelStockItemItemPrice.setText(String.valueOf(vm.getItemSlots().get(0).getItemCost()));
-            labelStockItemItemPrice.setHorizontalAlignment(JLabel.CENTER);
-            labelStockItemItemPrice.setForeground(new Color(0xeeeeee));
-            labelStockItemItemPrice.setFont(font2);
-            gbc.gridx = 1;
-            gbc.gridy = 1;
-            panelStockItemItemInfo.add(labelStockItemItemPrice, gbc);
-            
-            // labelStockItemItemCalories.setText(String.valueOf(vm.getItemSlots().get(0).getItemCalories()));
-            labelStockItemItemCalories.setHorizontalAlignment(JLabel.CENTER);
-            labelStockItemItemCalories.setForeground(new Color(0xeeeeee));
-            labelStockItemItemCalories.setFont(font2);
-            gbc.gridx = 1;
-            gbc.gridy = 2;
-            panelStockItemItemInfo.add(labelStockItemItemCalories, gbc);
-
-            // labelStockItemItemStock.setText(String.valueOf(vm.getItemSlots().get(0).getItems().size()));
-            labelStockItemItemStock.setHorizontalAlignment(JLabel.CENTER);
-            labelStockItemItemStock.setForeground(new Color(0xeeeeee));
-            labelStockItemItemStock.setFont(font2);
-            gbc.gridx = 1;
-            gbc.gridy = 3;
-            panelStockItemItemInfo.add(labelStockItemItemStock, gbc);
-
-            // labelStockItemItemIndex.setText("0");
-            labelStockItemItemIndex.setHorizontalAlignment(JLabel.CENTER);
-            labelStockItemItemIndex.setForeground(new Color(0xeeeeee));
-            labelStockItemItemIndex.setFont(font2);
-            gbc.gridx = 1;
-            gbc.gridy = 4;
-            panelStockItemItemInfo.add(labelStockItemItemIndex, gbc);
-
-
-
-
-
-
         frame.add(panelCont);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setBounds(0,0,800,1000);
         frame.setVisible(true);
-    }
-
-    public JFrame getFrame() {
-        return frame;
-    }
-
-    public JPanel getPanelCont() {
-        return panelCont;
-    }
-
-    public void setRegularVMView(RegularVMView regularVMView) {
-        this.regularVMView = regularVMView;
     }
 }

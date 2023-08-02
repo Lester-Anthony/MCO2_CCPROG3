@@ -4,11 +4,15 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 
-public class ItemVMView {
+/**
+ * The ItemMenuView class represents the view or user interface for displaying the item menu in a vending machine.
+ * It provides methods to show the list of available items and their details to the user.
+ * It communicates with the Controller to retrieve item data and handle user interactions related to item selection.
+ */
+public class ItemMenuView {
     private RegularVM vm;
     private ArrayList<ItemSlot> itemList;
     
-    CardLayout cl = new CardLayout();
     GridBagConstraints gbc = new GridBagConstraints();
 
     ItemSlot currentItemSlot;
@@ -37,7 +41,7 @@ public class ItemVMView {
         
     JTextField textFieldItemPrice = new JTextField("0.0");
     
-    public ItemVMView(RegularVM vm) {
+    public ItemMenuView(RegularVM vm) {
 
         this.vm = vm;
         this.itemList = vm.getItemSlots();
@@ -168,6 +172,43 @@ public class ItemVMView {
         textFieldItemPrice.setFocusable(true);
         frame.add(textFieldItemPrice);
 
+        JButton buttonAddStock = new JButton("Add Stock");
+        JButton buttonSetPrice = new JButton("Set Price");
+        JButton buttonExit = new JButton("Exit");
+
+        buttonAddStock.setBounds(470,380,305,100);
+        buttonAddStock.setFocusable(false);
+        frame.add(buttonAddStock);
+        
+        buttonSetPrice.setBounds(470,490,305,100);
+        buttonSetPrice.setFocusable(false);
+        frame.add(buttonSetPrice);
+        
+        buttonExit.setBounds(470,605,300,100);
+        buttonExit.setFocusable(false);
+        frame.add(buttonExit);
+
+        buttonAddStock.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                vm.stockItem(currentItemSlot, 1);
+                labelItemStock.setText(String.valueOf(Integer.parseInt(labelItemStock.getText()) + 1));
+            }
+        });
+        buttonSetPrice.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                labelItemPrice.setText(textFieldItemPrice.getText());
+                currentItemSlot.setItemPrice(Float.parseFloat(textFieldItemPrice.getText()));
+                textFieldItemPrice.setText("0.0");
+            }
+        });
+        buttonExit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                frame.dispose();
+            }
+        });
 
         // Frame
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

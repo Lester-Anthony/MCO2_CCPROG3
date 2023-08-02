@@ -1,18 +1,16 @@
 import javax.swing.*;
-import javax.swing.border.Border;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 
 /**
- * The RegularVMView class represents the view or user interface for a regular vending machine.
+ * The SpecialVMView class represents the view or user interface for a special vending machine.
  * It provides methods to display and interact with the vending machine's interface.
  * This class is responsible for presenting information to the user and handling user inputs.
  * It communicates with the Controller to perform various vending machine operations.
  */
-public class RegularVMView {
-    private RegularVM vm;
+public class SpecialVMView {
+    private SpecialVM vm;
     private ArrayList<ItemSlot> itemList;
     
     CardLayout cl = new CardLayout();
@@ -53,7 +51,7 @@ public class RegularVMView {
         
     JTextField textFieldBalance = new JTextField("0.0");
     
-    public RegularVMView(RegularVM vm) {
+    public SpecialVMView(SpecialVM vm) {
 
 
         this.vm = vm;
@@ -195,7 +193,7 @@ public class RegularVMView {
         panelCont.setBackground(Color.GRAY);
 
         panelEnterPayment.setBackground(Color.GRAY);
-        panelEnterPayment.setLayout(new GridLayout(4,3,10,10));
+        panelEnterPayment.setLayout(new GridLayout(5,3,10,10));
         
         panelReceiveChange.setBackground(Color.GRAY);
         
@@ -361,9 +359,17 @@ public class RegularVMView {
             public void actionPerformed(ActionEvent arg0) {
                 frame.revalidate();
                 float payment = Float.parseFloat(textFieldBalance.getText());
-                float cost = Float.parseFloat(labelItemPrice.getText());
+                float cost = vm.getCartTotalCost();
+                boolean thereIsIndependent = false;
 
-                if(currentItemSlot == null) {
+                for(ItemSlot cartItem : vm.getCart()) {
+                    if(cartItem.getItem().getIsIndependent())
+                        thereIsIndependent = true;
+                }
+                if(!thereIsIndependent) {
+                    JOptionPane.showMessageDialog(null, "All orders must include at least 1 independent item.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                else if(currentItemSlot == null) {
                     JOptionPane.showMessageDialog(null, "Must select item first.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
                 else if(payment < cost) {
@@ -377,15 +383,13 @@ public class RegularVMView {
                     // Update Stock Label
                     labelItemStock.setText(String.valueOf(Integer.parseInt(labelItemStock.getText()) - 1));
                     // Decrements item stock by 1 and adds to total values in transaction history
-                    vm.buyItem(currentItemSlot, payment);
+                    vm.buyCart(payment);
                     
-                    ArrayList<Denomination> changeList = vm.produceChange(payment, cost);
+                    ArrayList<Denomination> changeList = vm.produceChange(payment, vm.getCartTotalCost());
 
                     float totalChange = 0;
 
                     textAreaReceiveChange.setText("");
-
-                    textAreaReceiveChange.append("\n        Dispensing " + currentItemSlot.getItemName() + "...\n");
 
                     for(Denomination denomination : changeList) {
                         if(denomination.getQuantity() > 0) {
@@ -410,17 +414,35 @@ public class RegularVMView {
                         totalChange += denomination.getValue() * denomination.getQuantity();
                     }
             
-                    if(totalChange != payment - cost) {
+                    if(totalChange != payment - vm.getCartTotalCost()) {
                         textAreaReceiveChange.append("\n\nERROR! Machine has insufficient balance.");
                     }
                     textAreaReceiveChange.append("\n\n        TOTAL CHANGE : PHP " + totalChange);
 
-                    cl.show(panelCont, "Receive Change");              
+                    cl.show(panelCont, "Receive Change");      
+                    
+                    for(ItemSlot itemSlot : vm.getCart()) {
+                        textAreaReceiveChange.append("\n\n        " + itemSlot.getItem().getProcess() + "...");
+                    }
+
+                    textAreaReceiveChange.append("\n\n        Dispensing item mix.");
 
                 }
             }
         });
         panelEnterPayment.add(buttonBuyButton);
+
+        JButton buttonAddToCart = new JButton("Add Item");
+        buttonAddToCart.setPreferredSize(new Dimension(130,50));
+        buttonAddToCart.setFocusable(false);
+        panelEnterPayment.add(buttonAddToCart);
+        buttonAddToCart.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                vm.addToCart(currentItemSlot);
+                labelItemStock.setText(String.valueOf(Integer.parseInt(labelItemStock.getText()) - 1));
+            }
+        });
 
         buttonGetChange.setFocusable(false);
         buttonGetChange.setPreferredSize(new Dimension(130,50));
@@ -464,9 +486,11 @@ public class RegularVMView {
                     if(totalChange != payment - cost) {
                         textAreaReceiveChange.append("\n\nERROR! Machine has insufficient balance.");
                     }
-                    textAreaReceiveChange.append("\n\n        TOTAL CHANGE : PHP " + totalChange);        
+                    textAreaReceiveChange.append("\n\n        TOTAL CHANGE : PHP " + totalChange + "\n");        
 
-                cl.show(panelCont, "Receive Change");              
+
+                cl.show(panelCont, "Receive Change");   
+                
             }
         });
         panelEnterPayment.add(buttonGetChange);
@@ -480,7 +504,6 @@ public class RegularVMView {
             }
         });
         panelEnterPayment.add(buttonPaymentExit);
-
         frame.add(panelCont);
 
         // Frame
@@ -490,6 +513,5 @@ public class RegularVMView {
         frame.setPreferredSize(new Dimension(800, 1000));
         frame.pack();
         frame.setVisible(true);
-        
     }
 }
