@@ -100,6 +100,11 @@ public class RegularVM {
 
         return changeList;
     }
-
-
+    public void stockItem(ItemSlot itemSlot, Item item, int quantity) {
+        for(int i = 0; i < quantity; i++)
+            itemSlot.getItems().add(item);
+    }
+    public void setItemSlotPrice(ItemSlot itemSlot, float price) {
+        itemSlot.setItemPrice(price);
+    }
 }

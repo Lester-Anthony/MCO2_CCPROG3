@@ -29,4 +29,8 @@ public class ItemSlot {
     public float getItemCalories() {
         return itemCalories;
     }
+
+    public void setItemPrice(float itemCost) {
+        this.itemCost = itemCost;
+    }
 }

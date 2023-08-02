@@ -72,6 +72,7 @@ public class RegularVMView {
             float calories = vm.getItemSlots().get(i).getItemCalories();
             int stock = vm.getItemSlots().get(i).getItems().size();
             ItemSlot itemSlot = vm.getItemSlots().get(i);
+            int index = i;
         
             JButton buttonSelect = new JButton(name);
 
@@ -86,6 +87,7 @@ public class RegularVMView {
                     labelItemPrice.setText(String.valueOf(cost));
                     labelItemCalories.setText(String.valueOf(calories));
                     labelItemStock.setText(String.valueOf(stock));
+                    labelItemIndex.setText(String.valueOf(index));
                     currentItemSlot = itemSlot;
                 }
             });
@@ -132,7 +134,7 @@ public class RegularVMView {
             panelItemInfo.add(labelItemIndexLabel, gbc);
         
             // Values
-            labelItemName.setText(vm.getItemSlots().get(0).getItemName());
+            labelItemName.setText("");
             labelItemName.setHorizontalAlignment(JLabel.CENTER);
             labelItemName.setForeground(new Color(0xeeeeee));
             labelItemName.setFont(font2);
@@ -140,7 +142,7 @@ public class RegularVMView {
             gbc.gridy = 0;
             panelItemInfo.add(labelItemName, gbc);
             
-            labelItemPrice.setText(String.valueOf(vm.getItemSlots().get(0).getItemCost()));
+            labelItemPrice.setText("");
             labelItemPrice.setHorizontalAlignment(JLabel.CENTER);
             labelItemPrice.setForeground(new Color(0xeeeeee));
             labelItemPrice.setFont(font2);
@@ -148,7 +150,7 @@ public class RegularVMView {
             gbc.gridy = 1;
             panelItemInfo.add(labelItemPrice, gbc);
             
-            labelItemCalories.setText(String.valueOf(vm.getItemSlots().get(0).getItemCalories()));
+            labelItemCalories.setText("");
             labelItemCalories.setHorizontalAlignment(JLabel.CENTER);
             labelItemCalories.setForeground(new Color(0xeeeeee));
             labelItemCalories.setFont(font2);
@@ -156,7 +158,7 @@ public class RegularVMView {
             gbc.gridy = 2;
             panelItemInfo.add(labelItemCalories, gbc);
 
-            labelItemStock.setText(String.valueOf(vm.getItemSlots().get(0).getItems().size()));
+            labelItemStock.setText("");
             labelItemStock.setHorizontalAlignment(JLabel.CENTER);
             labelItemStock.setForeground(new Color(0xeeeeee));
             labelItemStock.setFont(font2);
@@ -164,7 +166,7 @@ public class RegularVMView {
             gbc.gridy = 3;
             panelItemInfo.add(labelItemStock, gbc);
 
-            labelItemIndex.setText("0");
+            labelItemIndex.setText("");
             labelItemIndex.setHorizontalAlignment(JLabel.CENTER);
             labelItemIndex.setForeground(new Color(0xeeeeee));
             labelItemIndex.setFont(font2);
@@ -364,7 +366,7 @@ public class RegularVMView {
                 else if(payment < cost) {
                     JOptionPane.showMessageDialog(null, "Insufficient balance.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
-                else if(Integer.parseInt(labelItemStock.getText()) <= 0) {
+                else if(currentItemSlot.getItems().size() <= 0) {
                     JOptionPane.showMessageDialog(null, "Item is out of stock.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
                 else {
@@ -482,21 +484,6 @@ public class RegularVMView {
             }
         });
         panelEnterPayment.add(buttonPaymentExit);
-
-        // Receive Change Panel
-
-
-
-        // JButton btnEnter = new JButton(" Enter ");
-        // btnEnter.setFocusable(false);
-        // btnEnter.setPreferredSize(new Dimension(130,50));
-        // btnEnter.addActionListener(e -> textfield.setText("0.0"));
-        // btnEnter.addActionListener(e -> System.out.println(textfield.getText()));
-        // btnEnter.addActionListener(e -> balTextfield.setText(String.valueOf(Float.parseFloat(balTextfield.getText()) + Float.parseFloat(textfield.getText()))));
-        // gbc.gridx = 4;
-        // gbc.gridy = 2;
-        // gbc.gridwidth = 1;
-        // changePanel.add(btnEnter,gbc);
 
         frame.add(panelCont);
 
