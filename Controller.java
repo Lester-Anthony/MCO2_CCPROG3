@@ -322,7 +322,7 @@ public class Controller {
                 buttonRVMExitToCreateVM.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent arg0) {
-                        if(vm.getItemSlots().size() >= 1 && !textFieldRVMName.getText().equals("")) {
+                        if(vm.getItemSlots().size() >= 8 && !textFieldRVMName.getText().equals("")) {
                             vm.setName(textFieldRVMName.getText());   
                             cl.show(panelCont, "Create Vending Machine");
                         }
@@ -464,7 +464,7 @@ public class Controller {
                 buttonSVMExitToCreateVM.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent arg0) {
-                        if(svm.getItemSlots().size() >= 1 && !textFieldSVMName.getText().equals("")) {
+                        if(svm.getItemSlots().size() >= 8 && !textFieldSVMName.getText().equals("")) {
                             svm.setName(textFieldSVMName.getText());   
                             cl.show(panelCont, "Create Vending Machine");
                         }
